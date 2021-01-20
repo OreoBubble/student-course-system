@@ -57,6 +57,7 @@ Route::group(['namespace'=>'Admin','prefix'=>'admin','middleware'=>['auth','perm
         Route::get('user/{id}/permission','UserController@permission')->name('admin.user.permission')->middleware('permission:system.user.permission');
         Route::put('user/{id}/assignPermission','UserController@assignPermission')->name('admin.user.assignPermission')->middleware('permission:system.user.permission');
     });
+
     //角色管理
     Route::group(['middleware'=>'permission:system.role'],function (){
         Route::get('role','RoleController@index')->name('admin.role');
@@ -85,19 +86,79 @@ Route::group(['namespace'=>'Admin','prefix'=>'admin','middleware'=>['auth','perm
         Route::delete('permission/destroy','PermissionController@destroy')->name('admin.permission.destroy')->middleware('permission:system.permission.destroy');
     });
     //菜单管理
-    Route::group(['middleware'=>'permission:system.menu'],function (){
-        Route::get('menu','MenuController@index')->name('admin.menu');
-        Route::get('menu/data','MenuController@data')->name('admin.menu.data');
+//    Route::group(['middleware'=>'permission:system.menu'],function (){
+//        Route::get('menu','MenuController@index')->name('admin.menu');
+//        Route::get('menu/data','MenuController@data')->name('admin.menu.data');
+//        //添加
+//        Route::get('menu/create','MenuController@create')->name('admin.menu.create')->middleware('permission:system.menu.create');
+//        Route::post('menu/store','MenuController@store')->name('admin.menu.store')->middleware('permission:system.menu.create');
+//        //编辑
+//        Route::get('menu/{id}/edit','MenuController@edit')->name('admin.menu.edit')->middleware('permission:system.menu.edit');
+//        Route::put('menu/{id}/update','MenuController@update')->name('admin.menu.update')->middleware('permission:system.menu.edit');
+//        //删除
+//        Route::delete('menu/destroy','MenuController@destroy')->name('admin.menu.destroy')->middleware('permission:system.menu.destroy');
+//    });
+});
+
+
+Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['auth', 'permission:teacher.manage']], function () {
+    //老师管理
+    Route::group(['middleware'=>['permission:teacher.teacher']],function (){
+        Route::get('teacher/data', 'TeacherController@data')->name('admin.teacher.data');
+        Route::get('teacher','TeacherController@index')->name('admin.teacher');
         //添加
-        Route::get('menu/create','MenuController@create')->name('admin.menu.create')->middleware('permission:system.menu.create');
-        Route::post('menu/store','MenuController@store')->name('admin.menu.store')->middleware('permission:system.menu.create');
+        Route::get('teacher/create','TeacherController@create')->name('admin.teacher.create')->middleware('permission:teacher.teacher.create');
+        Route::post('teacher/store','TeacherController@store')->name('admin.teacher.store')->middleware('permission:teacher.teacher.create');
         //编辑
-        Route::get('menu/{id}/edit','MenuController@edit')->name('admin.menu.edit')->middleware('permission:system.menu.edit');
-        Route::put('menu/{id}/update','MenuController@update')->name('admin.menu.update')->middleware('permission:system.menu.edit');
+        Route::get('teacher/{id}/edit','TeacherController@edit')->name('admin.teacher.edit')->middleware('permission:teacher.teacher.edit');
+        Route::put('teacher/{id}/update','TeacherController@update')->name('admin.teacher.update')->middleware('permission:teacher.teacher.edit');
         //删除
-        Route::delete('menu/destroy','MenuController@destroy')->name('admin.menu.destroy')->middleware('permission:system.menu.destroy');
+        Route::delete('teacher/destroy','TeacherController@destroy')->name('admin.teacher.destroy')->middleware('permission:teacher.teacher.destroy');
+    });
+    //课程管理
+    Route::group(['middleware'=>['permission:teacher.timetable']],function (){
+        Route::get('timetable/data', 'TimeTableController@data')->name('admin.timetable.data');
+        Route::get('timetable','TimeTableController@index')->name('admin.timetable');
+//        //添加
+        Route::get('timetable/create','TimeTableController@create')->name('admin.timetable.create')->middleware('permission:teacher.timetable.create');
+        Route::post('timetable/store','TimeTableController@store')->name('admin.timetable.store')->middleware('permission:teacher.timetable.create');
+//        //编辑
+        Route::get('timetable/{id}/edit','TimeTableController@edit')->name('admin.timetable.edit')->middleware('permission:teacher.timetable.edit');
+        Route::put('timetable/{id}/update','TimeTableController@update')->name('admin.timetable.update')->middleware('permission:teacher.timetable.edit');
+//        //删除
+        Route::delete('timetable/destroy','TimeTableController@destroy')->name('admin.timetable.destroy')->middleware('permission:teacher.timetable.destroy');
     });
 });
+
+Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['auth', 'permission:student.manage']], function () {
+    //学生管理
+    Route::group(['middleware'=>['permission:student.student']],function (){
+        Route::get('student/data', 'StudentController@data')->name('admin.student.data');
+        Route::get('student','StudentController@index')->name('admin.student');
+        //添加
+        Route::get('student/create','StudentController@create')->name('admin.student.create')->middleware('permission:student.student.create');
+        Route::post('student/store','StudentController@store')->name('admin.student.store')->middleware('permission:student.student.create');
+        //编辑
+        Route::get('student/{id}/edit','StudentController@edit')->name('admin.student.edit')->middleware('permission:student.student.edit');
+        Route::put('student/{id}/update','StudentController@update')->name('admin.student.update')->middleware('permission:student.student.edit');
+        //删除
+        Route::delete('student/destroy','StudentController@destroy')->name('admin.student.destroy')->middleware('permission:student.student.destroy');
+    });
+    //学生选课
+    Route::group(['middleware'=>['permission:student.studentcourse']],function (){
+        Route::get('studentcourse/data', 'StudentCourseController@data')->name('admin.studentcourse.data');
+        Route::get('studentcourse','StudentCourseController@index')->name('admin.studentcourse');
+        //添加
+        Route::get('studentcourse/create','StudentCourseController@create')->name('admin.studentcourse.create')->middleware('permission:student.studentcourse.create');
+        Route::post('studentcourse/store','StudentCourseController@store')->name('admin.studentcourse.store')->middleware('permission:student.studentcourse.create');
+
+        Route::post('studentcourse/{id}/add', 'StudentCourseController@add')->name('admin.studentcourse.create')->middleware('permission:student.studentcourse.create');
+
+        //删除
+        Route::delete('studentcourse/destroy','StudentCourseController@destroy')->name('admin.studentcourse.destroy')->middleware('permission:student.studentcourse.destroy');
+    });
+});
+
 
 
 //资讯管理
