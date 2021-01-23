@@ -153,6 +153,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::post('studentcourse/store','StudentCourseController@store')->name('admin.studentcourse.store')->middleware('permission:student.studentcourse.create');
 
         Route::post('studentcourse/{id}/add', 'StudentCourseController@add')->name('admin.studentcourse.create')->middleware('permission:student.studentcourse.create');
+        Route::get('studentcourse/{id}/cancel', 'StudentCourseController@cancel')->name('admin.studentcourse.destroy')->middleware('permission:student.studentcourse.destroy');
 
         //删除
         Route::delete('studentcourse/destroy','StudentCourseController@destroy')->name('admin.studentcourse.destroy')->middleware('permission:student.studentcourse.destroy');

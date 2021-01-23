@@ -64,9 +64,9 @@ class TeacherController extends Controller
             'name' => $request->get('name'),
             'uuid' => \Faker\Provider\Uuid::uuid()
         ]);
-        //$roles = array("7");
-        //$user->identity_card()->save($card);
-        //$user->syncRoles($roles)
+//        $roles = array("7");
+//        $user->identity_card()->save($card);
+//        $user->syncRoles($roles);
         if ($user->teacher()->create($teacher)){
             return redirect()->to(route('admin.teacher'))->with(['status'=>'添加老师成功']);
         }
